@@ -1,3 +1,5 @@
+const dotenv = require('dotenv')
+dotenv.config();
 const mySql2 = require("mysql2");
 
 class DBConnection {
@@ -40,3 +42,5 @@ class DBConnection {
     });
   };
 }
+
+module.exports = new DBConnection().query
