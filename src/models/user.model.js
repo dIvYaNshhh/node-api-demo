@@ -21,17 +21,16 @@ class UserModel {
         }
 
         const { columnSet, values} = multipleColumnSet(params);
+        sql += ` WHERE ${columnSet}`;
         return await query(sql, [...values]);
     }
 
-    findOne = async(params={})=>{
-        const sql = `SELECT * FROM ${this.tableName}`
-    
-        if(!Object.keys(params).length){
-            return await query(sql);
-        }
-
+    findOne = async(params)=>{
         const { columnSet, values} = multipleColumnSet(params);
+
+        const sql = `SELECT * FROM ${this.tableName}
+        WHERE ${columnSet}`
+        
         const result = await query(sql, [...values]);
         return result[0];
     }
