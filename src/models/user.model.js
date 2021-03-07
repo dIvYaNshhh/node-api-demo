@@ -1,39 +1,44 @@
-const query = require('../database/db-connection');
-const { multipleColumnSet } = require('../utils/common.util');
-
+const query = require('../database/db-connection')
+const { multipleColumnSet } = require('../utils/common.util')
 
 class UserModel {
-    tableName = "user";
+  tableName = 'user'
 
-    create = async({username, password, first_name, last_name, email})=>{
-        const sql = `INSERT INTO ${this.tableName} (username, password, first_name, last_name, email) VALUES (?, ?, ?, ?, ?)`;
+  create = async ({ username, password, first_name, last_name, email }) => {
+    const sql = `INSERT INTO ${this.tableName} (username, password, first_name, last_name, email) VALUES (?, ?, ?, ?, ?)`
 
-        const result = await query(sql, [username, password, first_name, last_name, email]);
-        const affectedRows = result ? result.affectedRows : 0;
-        return affectedRows;
+    const result = await query(sql, [
+      username,
+      password,
+      first_name,
+      last_name,
+      email,
+    ])
+    const affectedRows = result ? result.affectedRows : 0
+    return affectedRows
+  }
+
+  find = async (params = {}) => {
+    const sql = `SELECT * FROM ${this.tableName}`
+
+    if (!Object.keys(params).length) {
+      return await query(sql)
     }
 
-    find = async(params={})=>{
-        const sql = `SELECT * FROM ${this.tableName}`
-    
-        if(!Object.keys(params).length){
-            return await query(sql);
-        }
+    const { columnSet, values } = multipleColumnSet(params)
+    sql += ` WHERE ${columnSet}`
+    return await query(sql, [...values])
+  }
 
-        const { columnSet, values} = multipleColumnSet(params);
-        sql += ` WHERE ${columnSet}`;
-        return await query(sql, [...values]);
-    }
+  findOne = async (params) => {
+    const { columnSet, values } = multipleColumnSet(params)
 
-    findOne = async(params)=>{
-        const { columnSet, values} = multipleColumnSet(params);
-
-        const sql = `SELECT * FROM ${this.tableName}
+    const sql = `SELECT * FROM ${this.tableName}
         WHERE ${columnSet}`
-        
-        const result = await query(sql, [...values]);
-        return result[0];
-    }
+
+    const result = await query(sql, [...values])
+    return result[0]
+  }
 }
 
-module.exports = new UserModel();
+module.exports = new UserModel()

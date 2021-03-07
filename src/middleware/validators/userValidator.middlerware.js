@@ -1,20 +1,20 @@
-const { check } = require("express-validator");
+const { check } = require('express-validator')
 
 exports.createUserSchema = [
-  check("username").exists().withMessage("username is required"),
+  check('username').exists().withMessage('username is required'),
 
-  check("email")
+  check('email')
     .exists()
-    .withMessage("email is required")
+    .withMessage('email is required')
     .isEmail()
-    .withMessage("Must be valid email"),
-];
+    .withMessage('Must be valid email'),
+]
 
 exports.loginUserSchema = [
-  check("email")
+  check('email')
     .exists()
-    .withMessage("email is required")
+    .withMessage('email is required')
     .isEmail()
-    .withMessage("Must be valid email"),
-  check("password").exists().withMessage("password is required"),
-];
+    .withMessage('Must be valid email'),
+  check('password').exists().withMessage('password is required'),
+]

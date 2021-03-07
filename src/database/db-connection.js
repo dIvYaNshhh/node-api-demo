@@ -1,6 +1,6 @@
 const dotenv = require('dotenv')
-dotenv.config();
-const mySql2 = require("mysql2");
+dotenv.config()
+const mySql2 = require('mysql2')
 
 class DBConnection {
   constructor() {
@@ -9,38 +9,38 @@ class DBConnection {
       user: process.env.DB_USER,
       password: process.env.DB_PASS,
       database: process.env.DB_DATABASE,
-    });
+    })
   }
 
   checkConnection() {
     this.db.getConnection((err, connection) => {
       if (err) {
-        console.log("Database error code: " + err.code);
-        console.log("Database error message: " + err.message);
+        console.log('Database error code: ' + err.code)
+        console.log('Database error message: ' + err.message)
       }
 
       if (connection) {
-        connection.release();
+        connection.release()
       }
-      return;
-    });
+      return
+    })
   }
 
   query = async (sql, values) => {
     return new Promise((resolve, reject) => {
       const callback = (error, result) => {
         if (error) {
-          reject(error);
+          reject(error)
         }
 
-        resolve(result);
-      };
+        resolve(result)
+      }
 
-      this.db.execute(sql, values, callback);
+      this.db.execute(sql, values, callback)
     }).catch((error) => {
-      console.log("DB Error: " + JSON.stringify(error));
-    });
-  };
+      console.log('DB Error: ' + JSON.stringify(error))
+    })
+  }
 }
 
 module.exports = new DBConnection().query
